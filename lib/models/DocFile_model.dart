@@ -4,13 +4,15 @@ class DocFileModel {
   late String type;
   late String size;
   late String date;
+  late String user;
 
   DocFileModel(
       {required this.name,
       required this.path,
       required this.type,
       required this.size,
-      required this.date});
+      required this.date,
+      required this.user});
 
   DocFileModel.fromJson(Map<String, dynamic> json) {
     name = json['name'] ?? '';
@@ -18,6 +20,7 @@ class DocFileModel {
     path = json['path'] ?? '';
     size = json['size'] ?? '';
     this.date = json['date'] ?? DateTime.now().toString();
+    this.user = json['user'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
@@ -27,6 +30,7 @@ class DocFileModel {
     data['type'] = this.type;
     data['size'] = this.size;
     data['date'] = this.date;
+    data['user'] = this.user;
     return data;
   }
 }

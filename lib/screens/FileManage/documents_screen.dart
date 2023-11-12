@@ -47,28 +47,32 @@ class DocumentsScreen extends StatelessWidget {
                             "only .xlsx, .csv, .pdf, .doc files are allowed",
                             style: TextStyle(color: Colors.white54),
                           ),
-                          trailing: OutlinedButton(onPressed: () {
-                            context.read<FilesBloc>().uploadFile();
-                          }, child: BlocBuilder<FilesBloc, FilesState>(
-                            builder: ((context, state) {
-                              if (state is FilesLoading) {
-                                return Row(
-                                  children: [
-                                    SizedBox(
-                                      child: CircularProgressIndicator.adaptive(
-                                          strokeCap: StrokeCap.round),
-                                      height: 10,
-                                      width: 10,
-                                    ),
-                                    SizedBox(width: defaultPadding / 2),
-                                    Text("Uploading.."),
-                                  ],
-                                );
-                              } else {
-                                return Text("Upload");
-                              }
-                            }),
-                          )),
+                          trailing: SizedBox(
+                            width: 200,
+                            child: OutlinedButton(onPressed: () {
+                              context.read<FilesBloc>().uploadFile();
+                            }, child: BlocBuilder<FilesBloc, FilesState>(
+                              builder: ((context, state) {
+                                if (state is FilesLoading) {
+                                  return Row(
+                                    children: [
+                                      SizedBox(
+                                        child:
+                                            CircularProgressIndicator.adaptive(
+                                                strokeCap: StrokeCap.round),
+                                        height: 10,
+                                        width: 10,
+                                      ),
+                                      SizedBox(width: defaultPadding / 2),
+                                      Text("Uploading.."),
+                                    ],
+                                  );
+                                } else {
+                                  return Text("Upload");
+                                }
+                              }),
+                            )),
+                          ),
                         ),
                       ),
                       SizedBox(height: defaultPadding),
@@ -96,39 +100,34 @@ class DocumentsScreen extends StatelessWidget {
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10)),
+                                      contentPadding: EdgeInsets.all(10),
                                       tileColor: secondaryColor,
-                                      title: Text(
-                                        file.name,
-                                      ),
-                                      subtitle: Text(double.parse(file.size)
-                                              .toStringAsFixed(2) +
-                                          " KB"),
-                                      trailing: ConstrainedBox(
-                                        constraints: BoxConstraints.loose(
-                                            Size.fromWidth(200)),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                      title: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text("Author: abc"),
-                                                  Text("${file.date}"),
-                                                ]),
-                                            IconButton(
-                                              icon: Icon(Icons.delete),
-                                              onPressed: () {
-                                                fireStoreService.deleteData(
-                                                    snapshot
-                                                        .data!.docs[index].id);
-                                              },
-                                            )
-                                          ],
-                                        ),
+                                            Text(
+                                              file.name,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(file.date),
+                                            Text(file.user)
+                                          ]),
+                                      subtitle: Text(
+                                          double.parse(file.size) > 1000
+                                              ? (double.parse(file.size) / 1000)
+                                                      .toStringAsFixed(2) +
+                                                  " MB"
+                                              : double.parse(file.size)
+                                                      .toStringAsFixed(2) +
+                                                  " KB"),
+                                      trailing: IconButton(
+                                        icon: Icon(Icons.delete),
+                                        onPressed: () {
+                                          fireStoreService.deleteData(
+                                              snapshot.data!.docs[index].id);
+                                        },
                                       ),
                                     ),
                                   );

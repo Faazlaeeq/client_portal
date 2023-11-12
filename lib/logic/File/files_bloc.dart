@@ -2,6 +2,7 @@ import 'package:client_portal/Database/firebase_service.dart';
 import 'package:client_portal/models/DocFile_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'files_state.dart';
@@ -11,6 +12,8 @@ class FilesBloc extends Cubit<FilesState> {
 
   FireStoreService _fireStoreService = FireStoreService("files");
   FireStorageService _fireStorageService = FireStorageService();
+  FirebaseAuthService _firebaseService = FirebaseAuthService();
+
   void uploadFile() async {
     try {
       emit(FilesLoading());
@@ -38,7 +41,8 @@ class FilesBloc extends Cubit<FilesState> {
               path: await uploadReference.getDownloadURL(),
               type: type,
               size: size.toString(),
-              date: DateTime.now().toIso8601String().split('T')[0]);
+              date: DateTime.now().toIso8601String().split('T')[0],
+              user: _firebaseService.auth.currentUser!.email!.toString());
 
           _fireStoreService.insertData(fileModel.toJson());
 
