@@ -1,6 +1,5 @@
 import 'package:client_portal/screens/Auth/login_screen.dart';
 import 'package:client_portal/screens/FileManage/documents_screen.dart';
-import 'package:client_portal/screens/dashboard/dashboard_screen.dart';
 import 'package:client_portal/screens/main/main_screen.dart';
 
 import 'package:flutter/material.dart';

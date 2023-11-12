@@ -1,14 +1,8 @@
-import 'dart:developer';
-
-import 'package:client_portal/Database/firebase_service.dart';
-import 'package:client_portal/controllers/MenuAppController.dart';
+import 'package:client_portal/logic/files_bloc.dart';
 import 'package:client_portal/responsive.dart';
-import 'package:client_portal/screens/dashboard/dashboard_screen.dart';
 import 'package:client_portal/screens/main/components/side_menu.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DocumentsScreen extends StatelessWidget {
   const DocumentsScreen({super.key});
@@ -38,39 +32,25 @@ class DocumentsScreen extends StatelessWidget {
                       ListTile(
                         title: Text("Upload Documents"),
                         subtitle: Text(
-                            "only .xlsx, .csv, .pdf, .doc files are allowed"),
-                        trailing: TextButton(
-                            onPressed: () async {
-                              var _paths;
-                              try {
-                                // Pick files using FilePicker
-                                _paths = (await FilePicker.platform.pickFiles(
-                                  type: FileType.custom,
-                                  allowMultiple: false,
-                                  onFileLoading: (FilePickerStatus status) =>
-                                      print(status),
-                                  allowedExtensions: [
-                                    'png',
-                                    'jpg',
-                                    'jpeg',
-                                    'heic'
-                                  ],
-                                ))
-                                    ?.files;
-                              } on PlatformException catch (e) {
-                                log('Unsupported operation' + e.toString());
-                              } catch (e) {
-                                log(e.toString());
-                              }
-
-                              if (_paths != null) {
-                                FireStorageService().uploadToFirebaseStorage(
-                                    _paths!.first.bytes!, _paths!.first.name);
-                              } else {
-                                print("No file selected");
-                              }
-                            },
-                            child: Text("Upload")),
+                          "only .xlsx, .csv, .pdf, .doc files are allowed",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        trailing: TextButton(onPressed: () {
+                          context.read<FilesBloc>().uploadFile();
+                        }, child: BlocBuilder<FilesBloc, FilesState>(
+                          builder: ((context, state) {
+                            if (state is FilesLoading) {
+                              return Row(
+                                children: [
+                                  Text("Uploading.."),
+                                  CircularProgressIndicator()
+                                ],
+                              );
+                            } else {
+                              return Text("Upload");
+                            }
+                          }),
+                        )),
                       ),
                     ],
                   ),

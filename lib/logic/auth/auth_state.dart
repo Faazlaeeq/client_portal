@@ -11,3 +11,9 @@ class AuthLoaded extends AuthState {
 
   AuthLoaded(this.userCredential);
 }
+
+class AuthError extends AuthState {
+  String? message;
+
+  AuthError(this.message);
+}

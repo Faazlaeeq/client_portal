@@ -1,6 +1,5 @@
 import 'package:client_portal/routes/routes_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({

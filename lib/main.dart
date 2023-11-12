@@ -4,8 +4,8 @@ import 'package:client_portal/controllers/MenuAppController.dart';
 import 'package:client_portal/logic/auth/auth_bloc.dart';
 import 'package:client_portal/logic/auth/auth_state.dart';
 import 'package:client_portal/logic/auth/user_bloc.dart';
+import 'package:client_portal/logic/files_bloc.dart';
 import 'package:client_portal/routes/routes_manager.dart';
-import 'package:client_portal/screens/Auth/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +24,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  UserBloc userBloc;
+  final UserBloc userBloc;
   MyApp(this.userBloc, {Key? key}) : super(key: key);
 
   @override
@@ -33,6 +33,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthCubit>(
           create: (context) => AuthCubit(AuthInit()),
+        ),
+        BlocProvider<FilesBloc>(
+          create: (context) => FilesBloc(FilesInitial()),
         ),
       ],
       child: MultiProvider(

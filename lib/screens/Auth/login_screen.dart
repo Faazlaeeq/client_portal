@@ -1,4 +1,3 @@
-import 'package:client_portal/Database/firebase_service.dart';
 import 'package:client_portal/logic/auth/auth_bloc.dart';
 import 'package:client_portal/logic/auth/auth_state.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,11 +65,13 @@ class LoginScreen extends StatelessWidget {
                                   child: CircularProgressIndicator(),
                                 ));
                               } else if (state is AuthLoaded) {
-                                if (state.userCredential != null) {
-                                  return Text("Login Successfull");
-                                } else {
-                                  return Text("Log in Failed");
-                                }
+                                Future.microtask(() {
+                                  Navigator.of(context)
+                                      .pushReplacementNamed("/home");
+                                });
+                                return Text("Login Successfull");
+                              } else if (state is AuthError) {
+                                return Text("Login Failed, ${state.message}");
                               }
 
                               return Text("Log in");

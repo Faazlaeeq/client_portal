@@ -1,8 +1,6 @@
-import 'package:client_portal/controllers/MenuAppController.dart';
 import 'package:client_portal/responsive.dart';
 import 'package:client_portal/screens/dashboard/components/my_fields.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 import 'components/header.dart';

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -101,7 +100,7 @@ class FireStorageService {
     }
   }
 
-  Future<void> uploadToFirebaseStorage(
+  Future<Reference?> uploadToFirebaseStorage(
       Uint8List fileBytes, String fileName) async {
     try {
       // Reference to the root of your Firebase Storage
@@ -118,9 +117,12 @@ class FireStorageService {
 
       // Handle the download URL as needed (e.g., store it in your database)
       log('File uploaded to Firebase Storage. Download URL: $downloadURL');
+      return fileReference;
     } catch (e) {
       log('Error uploading file to Firebase Storage: $e');
     }
+
+    return null;
   }
 }
 
@@ -137,8 +139,8 @@ class FirebaseAuthService {
           email: email, password: password);
       return userCredential;
     } on FirebaseAuthException catch (e) {
-      debugPrint("Firebase Auth Error: $e");
-      return null;
+      debugPrint("Firebase Auth Error: ${e.message}");
+      throw ErrorDescription(e.message!);
     }
   }
 
