@@ -8,7 +8,9 @@ import 'package:provider/provider.dart';
 import '../../../constants.dart';
 
 class Header extends StatelessWidget {
-  const Header({
+  final String title;
+  const Header(
+    this.title, {
     Key? key,
   }) : super(key: key);
 
@@ -25,14 +27,19 @@ class Header extends StatelessWidget {
           ),
         if (!Responsive.isMobile(context))
           Text(
-            "Dashboard",
+            title,
             style: Theme.of(context).textTheme.titleLarge,
           ),
-        ElevatedButton(
-            onPressed: () {
-              FirebaseAuthService().signOut();
-            },
-            child: Text("Sign Out")),
+        Spacer(
+          flex: 3,
+        ),
+        Expanded(
+          child: ElevatedButton(
+              onPressed: () {
+                FirebaseAuthService().signOut();
+              },
+              child: Text("Sign Out")),
+        ),
 
         // if (!Responsive.isMobile(context))
         //   Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),

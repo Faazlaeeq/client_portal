@@ -38,7 +38,7 @@ class FilesBloc extends Cubit<FilesState> {
               path: await uploadReference.getDownloadURL(),
               type: type,
               size: size.toString(),
-              date: DateTime.now().toString());
+              date: DateTime.now().toIso8601String().split('T')[0]);
 
           _fireStoreService.insertData(fileModel.toJson());
 

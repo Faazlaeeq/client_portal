@@ -4,7 +4,7 @@ import 'package:client_portal/controllers/MenuAppController.dart';
 import 'package:client_portal/logic/auth/auth_bloc.dart';
 import 'package:client_portal/logic/auth/auth_state.dart';
 import 'package:client_portal/logic/auth/user_bloc.dart';
-import 'package:client_portal/logic/files_bloc.dart';
+import 'package:client_portal/logic/file/files_bloc.dart';
 import 'package:client_portal/routes/routes_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -53,8 +53,16 @@ class MyApp extends StatelessWidget {
                     scaffoldBackgroundColor: bgColor,
                     textTheme: GoogleFonts.poppinsTextTheme(
                             Theme.of(context).textTheme)
-                        .apply(bodyColor: Colors.white),
+                        .apply(
+                            bodyColor: Colors.white,
+                            displayColor: Colors.white),
                     canvasColor: secondaryColor,
+                    listTileTheme: ListTileThemeData().copyWith(
+                      tileColor: secondaryColor,
+                      selectedColor: primaryColor.withOpacity(.4),
+                      iconColor: Colors.white70,
+                      textColor: Colors.white.withOpacity(.9),
+                    ),
                   ),
                   initialRoute: (state != null)
                       ? RoutesManager.homeRoute
