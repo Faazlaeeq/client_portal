@@ -1,6 +1,7 @@
 import 'package:client_portal/Database/firebase_service.dart';
 import 'package:client_portal/controllers/MenuAppController.dart';
 import 'package:client_portal/responsive.dart';
+import 'package:client_portal/routes/routes_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -9,9 +10,11 @@ import '../../../constants.dart';
 
 class Header extends StatelessWidget {
   final String title;
-  const Header(
+  final MenuAppController? menuAppController;
+  Header(
     this.title, {
     Key? key,
+    this.menuAppController,
   }) : super(key: key);
 
   @override
@@ -22,7 +25,11 @@ class Header extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.menu),
             onPressed: () {
-              context.read<MenuAppController>().controlMenu();
+              if (menuAppController == null) {
+                context.read<MenuAppController>().controlMenu();
+              } else {
+                menuAppController!.controlMenu();
+              }
             },
           ),
         if (!Responsive.isMobile(context))
@@ -35,8 +42,9 @@ class Header extends StatelessWidget {
         ),
         Expanded(
           child: ElevatedButton(
-              onPressed: () {
-                FirebaseAuthService().signOut();
+              onPressed: () async {
+                await FirebaseAuthService().signOut();
+                Navigator.of(context).pushNamed(RoutesManager.loginRoute);
               },
               child: Text("Sign Out")),
         ),

@@ -1,10 +1,16 @@
-import 'package:client_portal/routes/routes_manager.dart';
+import 'package:client_portal/logic/Home/home_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SideMenu extends StatelessWidget {
-  const SideMenu({
+  SideMenu({
     Key? key,
   }) : super(key: key);
+  final Map<String, dynamic> routeName = {
+    "Home": [HomeRouteDashboard(), Icons.dashboard],
+    "Documents": [HomeRouteDocuments(), Icons.document_scanner_outlined],
+    "Profile": [HomeRouteProfile(), Icons.person_outline],
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +28,16 @@ class SideMenu extends StatelessWidget {
               ),
             ),
           ),
-          DrawerListTile(
-            title: "Dashboard",
-            icon: Icons.dashboard,
-            routeName: RoutesManager.homeRoute,
-          ),
-          DrawerListTile(
-            title: "Documents",
-            icon: Icons.document_scanner_outlined,
-            routeName: RoutesManager.documentsRoute,
+          ListView.builder(
+            itemBuilder: (context, index) {
+              return DrawerListTile(
+                title: routeName.keys.elementAt(index),
+                icon: routeName.values.elementAt(index)[1],
+                routeName: routeName.values.elementAt(index)[0],
+              );
+            },
+            itemCount: routeName.length,
+            shrinkWrap: true,
           ),
         ],
       ),
@@ -47,16 +54,16 @@ class DrawerListTile extends StatelessWidget {
     required this.icon,
   }) : super(key: key);
 
-  final String title, routeName;
+  final String title;
+  final HomeState routeName;
   final IconData icon;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        Navigator.of(context).pushNamed(routeName);
+        context.read<HomeBloc>().pushRoute(routeName);
       },
-      horizontalTitleGap: 0.0,
       leading: Icon(
         icon,
         color: Colors.white54,

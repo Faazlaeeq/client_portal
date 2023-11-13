@@ -1,8 +1,11 @@
 import 'package:client_portal/controllers/MenuAppController.dart';
+import 'package:client_portal/logic/Home/home_bloc.dart';
 import 'package:client_portal/responsive.dart';
+import 'package:client_portal/screens/FileManage/documents_screen.dart';
 import 'package:client_portal/screens/dashboard/dashboard_screen.dart';
+import 'package:client_portal/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'components/side_menu.dart';
 
@@ -26,7 +29,17 @@ class MainScreen extends StatelessWidget {
             Expanded(
               // It takes 5/6 part of the screen
               flex: 5,
-              child: DashboardScreen(),
+              child:
+                  BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+                if (state is HomeRouteDashboard) {
+                  return DashboardScreen();
+                } else if (state is HomeRouteDocuments) {
+                  return DocumentsScreen();
+                } else if (state is HomeRouteProfile) {
+                  return ProfileScreen();
+                }
+                return DashboardScreen();
+              }),
             ),
           ],
         ),

@@ -17,3 +17,5 @@ class AuthError extends AuthState {
 
   AuthError(this.message);
 }
+
+class AuthForgotPassword extends AuthState {}

@@ -44,6 +44,23 @@ class FireStoreService {
     return col.snapshots();
   }
 
+  Future<Map<String, dynamic>> retriveDataMap() async {
+    Map<String, dynamic> data = await col.get() as Map<String, dynamic>;
+    return data;
+  }
+
+  retriveDataWhereMap(String columnName, String val) async {
+    try {
+      final data = await col.where(columnName, isEqualTo: val).get();
+      if (data.docs.isEmpty) {
+        return null;
+      }
+      return data;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   insertData(Map<String, dynamic> value) async {
     try {
       await col.add(value);
@@ -124,6 +141,18 @@ class FireStorageService {
 
     return null;
   }
+
+  deleteFile(String filepath) async {
+    // Create a reference to the file to delete
+    Reference ref = fstorage.ref().child(filepath);
+
+    // Delete the file
+    try {
+      await ref.delete();
+    } catch (e) {
+      debugPrint("Error deleting file: $e");
+    }
+  }
 }
 
 class FirebaseAuthService {
@@ -165,5 +194,9 @@ class FirebaseAuthService {
 
   User? getCurrentUser() {
     return auth.currentUser;
+  }
+
+  Future<void> sendPasswordResetEmail(String email) async {
+    await auth.sendPasswordResetEmail(email: email);
   }
 }
