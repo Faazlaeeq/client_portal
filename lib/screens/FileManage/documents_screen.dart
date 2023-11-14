@@ -1,14 +1,12 @@
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client_portal/Database/firebase_service.dart';
 import 'package:client_portal/constants.dart';
 import 'package:client_portal/logic/file/files_bloc.dart';
 import 'package:client_portal/models/DocFile_model.dart';
 import 'package:client_portal/screens/dashboard/components/header.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 
 class DocumentsScreen extends StatefulWidget {
   DocumentsScreen({super.key});
