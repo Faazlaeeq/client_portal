@@ -15,4 +15,6 @@ class HomeRouteProfile extends HomeState {}
 
 class HomeRouteDocuments extends HomeState {}
 
+class HomeRouteSetting extends HomeState {}
+
 class HomeLoading extends HomeState {}

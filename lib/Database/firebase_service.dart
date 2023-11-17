@@ -80,7 +80,11 @@ class FireStoreService {
 
   updateData(String docId, Map<String, dynamic> newVal) async {
     try {
-      await col.doc(docId).update(newVal);
+      await col.where("uid", isEqualTo: docId).get().then((value) {
+        value.docs.forEach((element) {
+          col.doc(element.id).update(newVal);
+        });
+      });
     } catch (e) {
       rethrow;
     }
@@ -198,5 +202,9 @@ class FirebaseAuthService {
 
   Future<void> sendPasswordResetEmail(String email) async {
     await auth.sendPasswordResetEmail(email: email);
+  }
+
+  Future<void> updatePassword(String password) async {
+    await auth.currentUser!.updatePassword(password);
   }
 }

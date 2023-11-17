@@ -1,17 +1,25 @@
+import 'package:client_portal/Database/firebase_service.dart';
 import 'package:client_portal/controllers/MenuAppController.dart';
 import 'package:client_portal/logic/Home/home_bloc.dart';
 import 'package:client_portal/responsive.dart';
+import 'package:client_portal/routes/routes_manager.dart';
 import 'package:client_portal/screens/FileManage/documents_screen.dart';
 import 'package:client_portal/screens/dashboard/dashboard_screen.dart';
 import 'package:client_portal/screens/profile/profile_screen.dart';
+import 'package:client_portal/screens/setting/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'components/side_menu.dart';
 
 class MainScreen extends StatelessWidget {
+  final auth = FirebaseAuthService();
+
   @override
   Widget build(BuildContext context) {
+    if (auth.auth.currentUser == null) {
+      Navigator.pushNamed(context, RoutesManager.loginRoute);
+    }
     return Scaffold(
       key: context.read<MenuAppController>().scaffoldKey,
       drawer: SideMenu(),
@@ -37,6 +45,8 @@ class MainScreen extends StatelessWidget {
                   return DocumentsScreen();
                 } else if (state is HomeRouteProfile) {
                   return ProfileScreen();
+                } else if (state is HomeRouteSetting) {
+                  return SettingScreen();
                 }
                 return DashboardScreen();
               }),

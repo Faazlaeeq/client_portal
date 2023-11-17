@@ -17,7 +17,7 @@ class MySnackbar {
         content:
             Text("Error: $message", style: TextStyle(color: Colors.red[900])),
         backgroundColor: Colors.red[300],
-        duration: Duration(seconds: 2),
+        duration: Duration(seconds: 5),
       ),
     );
   }

@@ -35,7 +35,7 @@ class Header extends StatelessWidget {
         if (!Responsive.isMobile(context))
           Text(
             title,
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
         Spacer(
           flex: 3,
@@ -72,7 +72,7 @@ class ProfileCard extends StatelessWidget {
         vertical: defaultPadding / 2,
       ),
       decoration: BoxDecoration(
-        color: secondaryColor,
+        color: Theme.of(context).colorScheme.background,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         border: Border.all(color: Colors.white10),
       ),
@@ -105,7 +105,7 @@ class SearchField extends StatelessWidget {
     return TextField(
       decoration: InputDecoration(
         hintText: "Search",
-        fillColor: secondaryColor,
+        fillColor: Theme.of(context).colorScheme.background,
         filled: true,
         border: OutlineInputBorder(
           borderSide: BorderSide.none,

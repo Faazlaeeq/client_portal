@@ -31,12 +31,12 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
               child: ListTile(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
-                tileColor: secondaryColor,
+                // tileColor: secondaryColor,
                 leading: Icon(Icons.upload_file),
                 title: Text("Upload Documents"),
                 subtitle: Text(
                   "only .xlsx, .csv, .pdf, .doc files are allowed",
-                  style: TextStyle(color: Colors.white54),
+                  style: Theme.of(context).textTheme.labelSmall,
                 ),
                 trailing: SizedBox(
                   width: 200,
@@ -104,7 +104,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                             contentPadding: EdgeInsets.all(10),
-                            tileColor: secondaryColor,
+                            // tileColor: secondaryColor,
                             title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -158,7 +158,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
                       leading: Icon(Icons.file_copy),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
-                      tileColor: secondaryColor,
+                      // tileColor: secondaryColor,
                       title: Text(
                         "No Files",
                       ),
@@ -175,7 +175,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
   }
 
   void downloadFile(String fileUrl, String fileName) {
-    final anchor = html.AnchorElement(href: fileUrl)
+    html.AnchorElement(href: fileUrl)
       ..target = 'blank'
       ..download = fileName
       ..click();

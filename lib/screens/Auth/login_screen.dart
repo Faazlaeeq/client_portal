@@ -22,9 +22,9 @@ class LoginScreen extends StatelessWidget {
               children: [
                 Text("Login Screen",
                     style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white)),
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    )),
                 SizedBox(height: 20),
                 Form(
                     child: ConstrainedBox(

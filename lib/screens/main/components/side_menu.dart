@@ -10,6 +10,7 @@ class SideMenu extends StatelessWidget {
     "Home": [HomeRouteDashboard(), Icons.dashboard],
     "Documents": [HomeRouteDocuments(), Icons.document_scanner_outlined],
     "Profile": [HomeRouteProfile(), Icons.person_outline],
+    "Setting": [HomeRouteSetting(), Icons.settings_outlined],
   };
 
   @override
@@ -22,7 +23,7 @@ class SideMenu extends StatelessWidget {
               child: Text(
                 "Client Portal",
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: Colors.white,
+                      // color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -66,11 +67,9 @@ class DrawerListTile extends StatelessWidget {
       },
       leading: Icon(
         icon,
-        color: Colors.white54,
       ),
       title: Text(
         title,
-        style: TextStyle(color: Colors.white54),
       ),
     );
   }

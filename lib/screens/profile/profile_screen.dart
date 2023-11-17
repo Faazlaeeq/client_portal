@@ -1,5 +1,6 @@
 import 'package:client_portal/Database/firebase_service.dart';
 import 'package:client_portal/models/user_model.dart';
+import 'package:client_portal/screens/dashboard/components/header.dart';
 import 'package:client_portal/widgets/mysnackbar.dart';
 import 'package:flutter/material.dart';
 
@@ -50,15 +51,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile'),
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Header("Profile"),
               SizedBox(height: 16),
               TextField(
                 controller: _nameController,
@@ -115,6 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       }
                       MySnackbar.showSucessSnackbar(context, "Profile Updated");
                     } catch (e) {
+                      debugPrint(e.toString());
                       MySnackbar.showErrorSnackbar(context, e.toString());
                     }
                   },
