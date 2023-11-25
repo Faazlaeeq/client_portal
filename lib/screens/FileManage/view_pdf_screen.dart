@@ -32,7 +32,7 @@ class ViewPDFScreen extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
             appBar: AppBar(
-              title: Text('View PDF'),
+              title: Text(documentName),
             ),
             body: FutureBuilder(
               future: loadPdf(),
