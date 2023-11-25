@@ -1,3 +1,5 @@
+import 'package:client_portal/screens/FileManage/view_pdf_screen.dart';
+import 'package:pdfx/pdfx.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -98,6 +100,11 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
                               horizontal: defaultPadding,
                               vertical: defaultPadding / 2),
                           child: ListTile(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      ViewPDFScreen(file.name)));
+                            },
                             enableFeedback: true,
                             enabled: true,
                             leading: Icon(Icons.file_copy),
@@ -202,6 +209,55 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
                 Navigator.of(context).pop(); // Close the dialog after deletion
               },
               child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> showPdfDialog(BuildContext context, String documentName) async {
+    late PdfController pdfController;
+
+    bool pdfLoaded = false;
+    try {
+      final ref = firebaseStorage.fstorage.ref(documentName);
+      final pdfBytes = await ref.getData();
+
+      if (pdfBytes != null) {
+        final pdfDocument = PdfDocument.openData(pdfBytes);
+        pdfController = PdfController(document: pdfDocument);
+        await pdfController.loadDocument(pdfDocument);
+        pdfLoaded = true;
+      }
+    } catch (e) {
+      print('Error loading PDF from Firebase: $e');
+    }
+
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('PDF View'),
+          content: pdfLoaded
+              ? SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: PdfView(
+                    controller: pdfController,
+                    renderer: (PdfPage page) => page.render(
+                      width: page.width * 2,
+                      height: page.height * 2,
+                      backgroundColor: '#FFFFFF',
+                    ),
+                  ),
+                )
+              : Text("Cant load pdf"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Ok'),
             ),
           ],
         );
