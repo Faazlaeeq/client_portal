@@ -1,4 +1,5 @@
 import 'package:client_portal/screens/FileManage/view_pdf_screen.dart';
+import 'package:client_portal/widgets/mysnackbar.dart';
 import 'package:pdfx/pdfx.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:flutter/material.dart';
@@ -95,15 +96,25 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
                         DocFileModel file = DocFileModel.fromJson(
                             snapshot.data!.docs[index].data()
                                 as Map<String, dynamic>);
+
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: defaultPadding,
                               vertical: defaultPadding / 2),
                           child: ListTile(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      ViewPDFScreen(file.name)));
+                            onTap: () async {
+                              final ref = firebaseStorage.fstorage
+                                  .ref()
+                                  .child(file.name);
+                              try {
+                                await ref.getDownloadURL();
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        ViewPDFScreen(file.name)));
+                              } catch (e) {
+                                MySnackbar.showErrorSnackbar(
+                                    context, "File not found");
+                              }
                             },
                             enableFeedback: true,
                             enabled: true,
