@@ -41,7 +41,9 @@ class FireStoreService {
     col = firestore.collection(collectionName);
   }
   Stream<QuerySnapshot> retriveData() {
-    return col.snapshots();
+    return col
+        .where("user", isEqualTo: FirebaseAuthService().getCurrentUser()!.uid)
+        .snapshots();
   }
 
   Future<Map<String, dynamic>> retriveDataMap() async {

@@ -89,93 +89,105 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
               stream: fireStoreService.retriveData(),
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data?.docs != null) {
-                  return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        DocFileModel file = DocFileModel.fromJson(
-                            snapshot.data!.docs[index].data()
-                                as Map<String, dynamic>);
+                  if (snapshot.data?.docs.length == 0) {
+                    return Padding(
+                      padding: const EdgeInsets.all(defaultPadding),
+                      child: ListTile(
+                        leading: Icon(Icons.file_copy),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        // tileColor: secondaryColor,
+                        title: Text(
+                          "No Files",
+                        ),
+                        subtitle: Text("Upload files to see here"),
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          DocFileModel file = DocFileModel.fromJson(
+                              snapshot.data!.docs[index].data()
+                                  as Map<String, dynamic>);
 
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: defaultPadding,
-                              vertical: defaultPadding / 2),
-                          child: ListTile(
-                            onTap: () async {
-                              final ref = firebaseStorage.fstorage
-                                  .ref()
-                                  .child(file.name);
-                              try {
-                                await ref.getDownloadURL();
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        ViewPDFScreen(file.name)));
-                              } catch (e) {
-                                MySnackbar.showErrorSnackbar(
-                                    context, "File not found");
-                              }
-                            },
-                            enableFeedback: true,
-                            enabled: true,
-                            leading: Icon(Icons.file_copy),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            contentPadding: EdgeInsets.all(10),
-                            // tileColor: secondaryColor,
-                            title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    file.name,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(file.date),
-                                  Text(file.user)
-                                ]),
-                            subtitle: calculateFileSize(file),
-                            trailing: SizedBox(
-                              width: 100,
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                      onPressed: () {
-                                        showDeleteConfirmationDialog(context,
-                                            snapshot.data!.docs[index].id);
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: defaultPadding,
+                                vertical: defaultPadding / 2),
+                            child: ListTile(
+                              onTap: () async {
+                                final ref = firebaseStorage.fstorage
+                                    .ref()
+                                    .child(file.name);
+                                try {
+                                  await ref.getDownloadURL();
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          ViewPDFScreen(file.name)));
+                                } catch (e) {
+                                  MySnackbar.showErrorSnackbar(
+                                      context, "File not found");
+                                }
+                              },
+                              enableFeedback: true,
+                              enabled: true,
+                              leading: Icon(Icons.file_copy),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              contentPadding: EdgeInsets.all(10),
+                              // tileColor: secondaryColor,
+                              title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      file.name,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(file.date),
+                                    Text(file.user)
+                                  ]),
+                              subtitle: calculateFileSize(file),
+                              trailing: SizedBox(
+                                width: 100,
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          showDeleteConfirmationDialog(context,
+                                              snapshot.data!.docs[index].id);
+                                        },
+                                        icon: Icon(Icons.delete)),
+                                    IconButton(
+                                      onPressed: () async {
+                                        final ref = firebaseStorage.fstorage
+                                            .ref()
+                                            .child(file.name);
+
+                                        final String url =
+                                            await ref.getDownloadURL();
+
+                                        downloadFile(url, file.name);
                                       },
-                                      icon: Icon(Icons.delete)),
-                                  IconButton(
-                                    onPressed: () async {
-                                      final ref = firebaseStorage.fstorage
-                                          .ref()
-                                          .child(file.name);
-
-                                      final String url =
-                                          await ref.getDownloadURL();
-
-                                      downloadFile(url, file.name);
-                                    },
-                                    icon: Icon(Icons.download),
-                                  ),
-                                ],
+                                      icon: Icon(Icons.download),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      });
+                          );
+                        });
+                  }
                 } else {
                   return Padding(
                     padding: const EdgeInsets.all(defaultPadding),
                     child: ListTile(
-                      leading: Icon(Icons.file_copy),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       // tileColor: secondaryColor,
-                      title: Text(
-                        "No Files",
-                      ),
-                      subtitle: Text("Upload files to see here"),
+                      title: CircularProgressIndicator(),
                     ),
                   );
                 }
