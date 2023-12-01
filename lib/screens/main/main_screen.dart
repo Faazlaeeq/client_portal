@@ -14,44 +14,48 @@ import 'components/side_menu.dart';
 
 class MainScreen extends StatelessWidget {
   final auth = FirebaseAuthService();
+  final MenuAppController menubloc = MenuAppController();
 
   @override
   Widget build(BuildContext context) {
     if (auth.auth.currentUser == null) {
       Navigator.pushNamed(context, RoutesManager.loginRoute);
     }
-    return Scaffold(
-      key: context.read<MenuAppController>().scaffoldKey,
-      drawer: SideMenu(),
-      body: SafeArea(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // We want this side menu only for large screen
-            if (Responsive.isDesktop(context))
+    return BlocProvider(
+      create: (context) => menubloc,
+      child: Scaffold(
+        key: menubloc.scaffoldKey,
+        drawer: SideMenu(),
+        body: SafeArea(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // We want this side menu only for large screen
+              if (Responsive.isDesktop(context))
+                Expanded(
+                  // default flex = 1
+                  // and it takes 1/6 part of the screen
+                  child: SideMenu(),
+                ),
               Expanded(
-                // default flex = 1
-                // and it takes 1/6 part of the screen
-                child: SideMenu(),
-              ),
-            Expanded(
-              // It takes 5/6 part of the screen
-              flex: 5,
-              child:
-                  BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-                if (state is HomeRouteDashboard) {
+                // It takes 5/6 part of the screen
+                flex: 5,
+                child:
+                    BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+                  if (state is HomeRouteDashboard) {
+                    return DashboardScreen();
+                  } else if (state is HomeRouteDocuments) {
+                    return DocumentsScreen();
+                  } else if (state is HomeRouteProfile) {
+                    return ProfileScreen();
+                  } else if (state is HomeRouteSetting) {
+                    return SettingScreen();
+                  }
                   return DashboardScreen();
-                } else if (state is HomeRouteDocuments) {
-                  return DocumentsScreen();
-                } else if (state is HomeRouteProfile) {
-                  return ProfileScreen();
-                } else if (state is HomeRouteSetting) {
-                  return SettingScreen();
-                }
-                return DashboardScreen();
-              }),
-            ),
-          ],
+                }),
+              ),
+            ],
+          ),
         ),
       ),
     );

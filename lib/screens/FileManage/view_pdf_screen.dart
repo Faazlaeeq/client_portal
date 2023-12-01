@@ -8,9 +8,17 @@ class ViewPDFScreen extends StatelessWidget {
   final FireStoreService fireStoreService = FireStoreService("files");
   final firebaseStorage = FireStorageService();
   late PdfController pdfController;
-  String documentName;
+  final String documentName;
 
   bool pdfLoaded = false;
+
+  isPdf() {
+    if (documentName.contains(".pdf")) {
+      return true;
+    }
+    return false;
+  }
+
   loadPdf() async {
     try {
       final ref = firebaseStorage.fstorage.ref(documentName);
@@ -34,20 +42,24 @@ class ViewPDFScreen extends StatelessWidget {
             appBar: AppBar(
               title: Text(documentName),
             ),
-            body: FutureBuilder(
-              future: loadPdf(),
-              builder: (context, snapshot) {
-                return pdfLoaded
-                    ? PdfView(
-                        controller: pdfController,
-                        pageSnapping: true,
-                        scrollDirection: Axis.vertical,
-                        physics: BouncingScrollPhysics(),
-                      )
-                    : Center(
-                        child: CircularProgressIndicator(),
-                      );
-              },
-            )));
+            body: !isPdf()
+                ? Center(
+                    child: Text("This is not a PDF file"),
+                  )
+                : FutureBuilder(
+                    future: loadPdf(),
+                    builder: (context, snapshot) {
+                      return pdfLoaded
+                          ? PdfView(
+                              controller: pdfController,
+                              pageSnapping: true,
+                              scrollDirection: Axis.vertical,
+                              physics: BouncingScrollPhysics(),
+                            )
+                          : Center(
+                              child: CircularProgressIndicator(),
+                            );
+                    },
+                  )));
   }
 }

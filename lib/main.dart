@@ -11,6 +11,8 @@ import 'package:client_portal/logic/setting/setting_bloc.dart';
 import 'package:client_portal/routes/routes_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,9 +37,7 @@ class MyApp extends StatelessWidget {
           BlocProvider<HomeBloc>(
             create: (context) => HomeBloc(),
           ),
-          BlocProvider<MenuAppController>(
-            create: (context) => MenuAppController(),
-          ),
+         
           BlocProvider<UserBloc>(create: (context) => UserBloc()),
           BlocProvider<SettingBloc>(
             create: (context) => SettingBloc(SettingInit()),

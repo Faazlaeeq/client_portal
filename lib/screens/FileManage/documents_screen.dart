@@ -134,12 +134,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
                                   Text(file.date),
                                   Text(file.user)
                                 ]),
-                            subtitle: Text(double.parse(file.size) > 1000
-                                ? (double.parse(file.size) / 1000)
-                                        .toStringAsFixed(2) +
-                                    " MB"
-                                : double.parse(file.size).toStringAsFixed(2) +
-                                    " KB"),
+                            subtitle: calculateFileSize(file),
                             trailing: SizedBox(
                               width: 100,
                               child: Row(
@@ -197,6 +192,16 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
       ..target = 'blank'
       ..download = fileName
       ..click();
+  }
+
+  Text calculateFileSize(DocFileModel file) {
+    try {
+      return Text(double.parse(file.size) > 1000
+          ? (double.parse(file.size) / 1000).toStringAsFixed(2) + " MB"
+          : double.parse(file.size).toStringAsFixed(2) + " KB");
+    } catch (e) {
+      return Text("");
+    }
   }
 
   Future<void> showDeleteConfirmationDialog(
