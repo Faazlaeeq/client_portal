@@ -42,7 +42,7 @@ class FilesBloc extends Cubit<FilesState> {
               type: type,
               size: size.toString(),
               date: DateTime.now().toIso8601String().split('T')[0],
-              user: _firebaseService.auth.currentUser!.email!.toString());
+              user: _firebaseService.auth.currentUser!.uid.toString());
 
           _fireStoreService.insertData(fileModel.toJson());
 

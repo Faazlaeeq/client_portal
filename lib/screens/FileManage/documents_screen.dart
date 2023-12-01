@@ -86,7 +86,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
               ),
             ),
             StreamBuilder(
-              stream: fireStoreService.retriveDatabyEmail(),
+              stream: fireStoreService.retriveDatabyUid(),
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data?.docs != null) {
                   if (snapshot.data?.docs.length == 0) {
