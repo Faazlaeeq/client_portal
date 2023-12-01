@@ -86,7 +86,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
               ),
             ),
             StreamBuilder(
-              stream: fireStoreService.retriveData(),
+              stream: fireStoreService.retriveDatabyEmail(),
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data?.docs != null) {
                   if (snapshot.data?.docs.length == 0) {
@@ -183,12 +183,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
                 } else {
                   return Padding(
                     padding: const EdgeInsets.all(defaultPadding),
-                    child: ListTile(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      // tileColor: secondaryColor,
-                      title: CircularProgressIndicator(),
-                    ),
+                    child: Container(child: CircularProgressIndicator()),
                   );
                 }
               },

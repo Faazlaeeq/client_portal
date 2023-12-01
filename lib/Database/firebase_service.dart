@@ -41,8 +41,12 @@ class FireStoreService {
     col = firestore.collection(collectionName);
   }
   Stream<QuerySnapshot> retriveData() {
+    return col.snapshots();
+  }
+
+  Stream<QuerySnapshot> retriveDatabyEmail() {
     return col
-        .where("user", isEqualTo: FirebaseAuthService().getCurrentUser()!.uid)
+        .where("user", isEqualTo: FirebaseAuthService().getCurrentUser()!.email)
         .snapshots();
   }
 
